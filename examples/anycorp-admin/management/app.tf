@@ -12,12 +12,17 @@ data "tfe_organization" "this" {
   }
 }
 
-data "tfe_variable_set" "vault" {
-  name = "Vault Varset"
+data "tfe_project" "admin_project" {
+  name = local.tfe_admin_project
   organization = data.tfe_organization.this.name
 }
 
-module "anycorp-team-lz" {
+data "tfe_variable_set" "vault" {
+  name = "Vault Varset - ${data.tfe_project.admin_project.name}"
+  organization = data.tfe_organization.this.name
+}
+
+module "anycorp-app-lz" {
   source  = "./../../.."
   # insert required variables here
 
